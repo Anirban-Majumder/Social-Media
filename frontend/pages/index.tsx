@@ -20,11 +20,8 @@ const Home = ({ tweets }: Props) => {
 			</Head>
 			<Toaster/>
 			<main className='grid grid-cols-9'>
-				{/* Sidebar */}
 				<Sidebar />
-				{/* Feed */}
 				<Feed tweets={tweets}/>
-				{/* Widgets */}
 				<Widgets />
 			</main>
 		</div>
