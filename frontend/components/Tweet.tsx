@@ -5,8 +5,6 @@ import TimeAgo from 'react-timeago'
 import {
   ChatAlt2Icon,
   HeartIcon,
-  SwitchHorizontalIcon,
-  UploadIcon,
 } from '@heroicons/react/outline'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
@@ -100,19 +98,13 @@ function Tweet({ tweet }: Props) {
       <div className="mt-5 flex justify-between">
         <div
           onClick={(e) => session && setCommentBoxVisible(!commentBoxVisible)}
-          className="flex cursor-pointer items-center space-x-3 text-gray-400"
+          className="flex cursor-pointer items-center ml-20 text-gray-400"
         >
           <ChatAlt2Icon className="h-5 w-5" />
           <p>{comments.length}</p>
         </div>
-        <div className="flex cursor-pointer items-center space-x-3 text-gray-400">
-          <SwitchHorizontalIcon className="h-5 w-5" />
-        </div>
-        <div className="flex cursor-pointer items-center space-x-3 text-gray-400">
+        <div className="flex cursor-pointer items-center mr-40 text-gray-400">
           <HeartIcon className="h-5 w-5" />
-        </div>
-        <div className="flex cursor-pointer items-center space-x-3 text-gray-400">
-          <UploadIcon className="h-5 w-5" />
         </div>
       </div>
 
