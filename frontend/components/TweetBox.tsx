@@ -33,7 +33,7 @@ function TweetBox({ setTweets }: Props) {
         const tweetBody: TweetBody = {
             text: input,
             username: session?.user?.name || "Unknown User",
-            profileImg: session?.user?.image || "https://links.papareact.com/gll",
+            profileImg: session?.user?.image || "/profile.jpg",
             image: image
         }
 
@@ -66,7 +66,7 @@ function TweetBox({ setTweets }: Props) {
                     <input 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    type="text" placeholder="What's Up" className='outline-none h-24 w-full text-xl placeholder:text-xl' />
+                    type="text" placeholder="What's Happening" className='outline-none h-24 w-full text-xl placeholder:text-xl' />
                     <div className='flex items-center'>
                         <div className='flex flex-1 space-x-2 text-twitter'>
                             {/* Icons */}
@@ -78,10 +78,10 @@ function TweetBox({ setTweets }: Props) {
                         </div>
                         <button 
                         onClick={handleSubmit}
-                        disabled={false} className='bg-black px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Post</button>
+                        disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Post</button>
                     </div>
                     {imageUrlBoxIsOpen && (
-                        <form className='mt-5 flex rounded-lg bg-red-200 py-2 px-4'>
+                        <form className='mt-5 flex rounded-lg bg-twitter/80 py-2 px-4'>
                             <input ref={imageInputRef} className='flex-1 bg-transparent p-2 text-white outline-none placeholder:text-white' type="text" placeholder='Enter Image Url'/>
                             <button onClick={addImageToTweet} type="submit" className='font-bold text-white rounded-lg'>Add Image</button>
                         </form>

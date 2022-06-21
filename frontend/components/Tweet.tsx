@@ -42,7 +42,7 @@ function Tweet({ tweet }: Props) {
       comment: input,
       tweetId: tweet._id,
       username: session?.user?.name || 'Unknown User',
-      profileImg: session?.user?.image || 'https://links.papareact.com/gll',
+      profileImg: session?.user?.image || '/profile.jpg',
     }
 
     const result = await fetch(`/api/addComment`, {
@@ -68,7 +68,7 @@ function Tweet({ tweet }: Props) {
       <div className="flex space-x-3">
         <img
           className="h-10 w-10 rounded-full object-cover"
-          src={tweet.profileImg || 'https://links.papareact.com/gll'}
+          src={tweet.profileImg || '/profile.jpg'}
           alt=""
         />
 
@@ -136,7 +136,7 @@ function Tweet({ tweet }: Props) {
       )}
 
       {comments?.length > 0 && (
-        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5">
+        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5 scrollbar-hide">
           {comments.map((comment) => (
             <div key={comment._id} className="relative flex space-x-2">
               <hr className="absolute left-5 top-10 h-8 border-x border-twitter/30" />
