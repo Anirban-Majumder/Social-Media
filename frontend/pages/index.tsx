@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import Feed from '../components/Feed'
 import Sidebar from '../components/Sidebar'
 import Widgets from '../components/Widgets'
+import Header from '../components/Header'
 import { Tweet } from '../typings'
 import { fetchTweets } from '../utils/fetchTweets'
 
@@ -19,6 +20,7 @@ const Home = ({ tweets }: Props) => {
         		<link rel="icon" href="/logo.png" />
 			</Head>
 			<Toaster/>
+			<Header/>
 			<main className='grid grid-cols-9'>
 				<Sidebar />
 				<Feed tweets={tweets}/>
