@@ -5,13 +5,13 @@ export interface Tweet extends TweetBody {
     _rev: string
     _type: 'tweet'
     blockTweet: boolean
+    like: number
 }
 export type TweetBody = {
     text: string,
     username: string,
     profileImg: string,
     image?: string,
-    like: number
 }
 
 export interface Comment extends CommentBody {
