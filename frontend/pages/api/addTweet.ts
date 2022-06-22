@@ -20,7 +20,8 @@ export default async function handler(
                     username: data.username,
                     blockTweet: false,
                     profileImg: data.profileImg,
-                    image: data.image
+                    image: data.image,
+                    like: 0
                 }
             }
         ]

@@ -16,6 +16,7 @@ interface Props {
 
 function Tweet({ tweet }: Props) {
   const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
+  const [liked, setLiked] = useState<boolean>(false)
   const [input, setInput] = useState<string>('')
   const [comments, setComments] = useState<Comment[]>([])
 
@@ -103,9 +104,19 @@ function Tweet({ tweet }: Props) {
           <ChatAlt2Icon className="h-5 w-5" />
           <p>{comments.length}</p>
         </div>
-        <div className="flex cursor-pointer items-center mr-10 text-gray-400">
+        {!liked && (
+        <div className="flex cursor-pointer items-center mr-10 text-gray-400"
+          onClick={(e) => session && setLiked(!liked)}>
           <HeartIcon className="h-5 w-5" />
+          <p>{tweet.like==0?" ":tweet.like}</p>
         </div>
+        )}
+        {liked && (
+        <div className="flex cursor-pointer items-center mr-10">
+          <HeartIcon className="h-5 w-5 fill-red-600" />
+          <p>{tweet.like+1}</p>
+        </div>
+        )}
       </div>
 
       {commentBoxVisible && (

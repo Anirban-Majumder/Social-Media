@@ -10,7 +10,8 @@ export type TweetBody = {
     text: string,
     username: string,
     profileImg: string,
-    image?: string
+    image?: string,
+    like: number
 }
 
 export interface Comment extends CommentBody {
