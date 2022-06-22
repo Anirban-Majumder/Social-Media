@@ -124,7 +124,7 @@ function Tweet({ tweet }: Props) {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 rounded-lg bg-gray-100 p-2 outline-none"
+            className="flex-1 rounded-lg bg-slate-100 p-2 outline-none"
             type="text"
             placeholder="Write a comment..."
           />

@@ -62,11 +62,11 @@ function TweetBox({ setTweets }: Props) {
         <div className='flex space-x-2 p-5'>
             <img className='h-14 w-14 object-cover rounded-full mt-4' src={session?.user?.image || "/profile.jpg"} alt="" />
             <div className='flex flex-1 pl-2'>
-                <form className='flex flex-1 flex-col'>
+                <form className='flex flex-1 flex-col '>
                     <input 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    type="text" placeholder="What's Happening" className='outline-none h-24 w-full text-xl placeholder:text-xl' />
+                    type="text" placeholder="What's Happening" className='outline-none h-24 w-full text-xl placeholder:text-xl p-6 bg-slate-100 rounded-lg mb-6' />
                     <div className='flex items-center'>
                         <div className='flex flex-1 space-x-2 text-twitter'>
                             {/* Icons */}
