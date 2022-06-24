@@ -9,6 +9,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { Tweet, TweetBody } from '../typings';
 import { fetchTweets } from '../utils/fetchTweets';
+import { fetchUserId } from '../utils/fetchUserId'
 import toast from 'react-hot-toast';
 
 
@@ -30,10 +31,12 @@ function TweetBox({ setTweets }: Props) {
         setImageUrlBoxIsOpen(false)
     }
     const postTweet = async () => {
+        const user = await fetchUserId(session?.user?.email)
+		
         const tweetBody: TweetBody = {
             text: input,
-            username: session?.user?.name || "Unknown User",
-            profileImg: session?.user?.image || "/profile.jpg",
+            username: user || "Unknown User",
+            userimg: " ",
             image: image
         }
 

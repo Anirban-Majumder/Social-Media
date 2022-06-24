@@ -8,7 +8,12 @@ import { Comment } from '../../typings'
 const commentQuery = groq`
 *[_type=="comment" && references(*[_type=="tweet" && _id==$tweetId]._id)]{
     _id,
-    ...
+    _createdAt,
+    _type,
+    comment,
+    "username":user->name,
+    "userimg":user->image,
+    tweet
   } | order(_createdAt desc)`
 
 type Data = Comment[]
@@ -22,6 +27,8 @@ export default async function handler(
     const comments: Comment[] = await sanityClient.fetch(commentQuery, {
         tweetId
     })
-    console.log(comments)
+    //console.log(commentQuery, {
+    //    tweetId
+    //})
     res.status(200).json(comments)
 }

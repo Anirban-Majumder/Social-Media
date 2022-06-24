@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from 'react'
-import { Comment, CommentBody, Tweet } from '../typings'
+import { Comment, CommentBody, Like, Tweet} from '../typings'
 import TimeAgo from 'react-timeago'
 import {
   ChatAlt2Icon,
@@ -9,6 +8,9 @@ import {
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
 import { fetchComments } from '../utils/fetchComments'
+import {fetchUserId} from '../utils/fetchUserId'
+import { fetchLikes } from '../utils/fetchLikes'
+import { join } from 'path'
 
 interface Props {
   tweet: Tweet
@@ -17,15 +19,32 @@ interface Props {
 function Tweet({ tweet }: Props) {
   const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
   const [liked, setLiked] = useState<boolean>(false)
+  const [checklike,SetChecklike] = useState<boolean>(false)
   const [input, setInput] = useState<string>('')
   const [comments, setComments] = useState<Comment[]>([])
 
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   const refreshComments = async () => {
     const comments: Comment[] = await fetchComments(tweet._id)
     setComments(comments)
   }
+
+  const refreshliked = async () => {
+    SetChecklike(true)
+
+    //console.log(status)
+    //console.log(session)
+    const value: boolean = await fetchLikes(tweet._id, session?.user?.email)
+    //console.log(input)
+    console.log('refreshinglike')
+    setLiked(value)
+
+  }
+  //useEffect(() => {
+  //  refreshliked()
+  //}, [checklike])
+
 
   useEffect(() => {
     refreshComments()
@@ -35,13 +54,14 @@ function Tweet({ tweet }: Props) {
     e.preventDefault()
 
     const commentToast = toast.loading('Posting Comment...')
+    const user = await fetchUserId(session?.user?.email)
 
     // Comment logic
     const comment: CommentBody = {
       comment: input,
       tweetId: tweet._id,
-      username: session?.user?.name || 'Unknown User',
-      profileImg: session?.user?.image || '/profile.jpg',
+      username: user || 'Unknown User',
+      userimg: '',
     }
 
     const result = await fetch(`/api/addComment`, {
@@ -49,7 +69,7 @@ function Tweet({ tweet }: Props) {
       method: 'POST',
     })
 
-    console.log('WOOHOO we made it', result)
+    //console.log('WOOHOO we made it', result)
     toast.success('Comment Posted!', {
       id: commentToast,
     })
@@ -57,6 +77,20 @@ function Tweet({ tweet }: Props) {
     setInput('')
     setCommentBoxVisible(false)
     refreshComments()
+  }
+
+  const handleLike = async () => {
+    setLiked(!liked)
+    const user = await fetchUserId(session?.user?.email)
+    const like: Like = {
+      tweetId: tweet._id,
+      userId: user,
+    }
+    const result = await fetch(`/api/addLike`, {
+      body: JSON.stringify(like),
+      method: 'POST',
+    })
+    //console.log('WOOHOO we liked it', result)
   }
 
   return (
@@ -67,7 +101,7 @@ function Tweet({ tweet }: Props) {
       <div className="flex space-x-3">
         <img
           className="h-10 w-10 rounded-full object-cover"
-          src={tweet.profileImg || '/profile.jpg'}
+          src={tweet.userimg || '/profile.jpg'}
           alt=""
         />
 
@@ -106,16 +140,16 @@ function Tweet({ tweet }: Props) {
         </div>
         {!liked && (
         <div className="flex cursor-pointer items-center mr-10 text-gray-400"
-          onClick={(e) => session && setLiked(!liked)}>
+          onClick={(j) => session && handleLike()}>
           <HeartIcon className="h-5 w-5" />
-          <p>{tweet.like==0?" ":tweet.like}</p>
+          <p>{tweet.likes===0?" ":tweet.likes}</p>
         </div>
         )}
         {liked && (
         <div className="flex cursor-pointer items-center mr-10">
           <HeartIcon className="h-5 w-5 fill-red-600" />
-          <p>{tweet.like+1}</p>
-        </div>
+          <p>{tweet.likes+1}</p>
+        </div>  
         )}
       </div>
 
@@ -144,7 +178,7 @@ function Tweet({ tweet }: Props) {
             <div key={comment._id} className="relative flex space-x-2">
               <hr className="absolute left-5 top-10 h-8 border-x border-twitter/30" />
               <img
-                src={comment.profileImg}
+                src={comment.userimg}
                 className="mt-2 h-7 w-7 rounded-full object-cover"
                 alt=""
               />
@@ -165,6 +199,9 @@ function Tweet({ tweet }: Props) {
             </div>
           ))}
         </div>
+      )}
+      {session && !checklike && refreshliked() && (
+        <div></div>
       )}
     </div>
   )

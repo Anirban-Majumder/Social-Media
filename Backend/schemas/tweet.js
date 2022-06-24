@@ -15,22 +15,21 @@ export default {
       type: 'boolean'
     },
     {
-      name: 'username',
-      title: 'Username',
-      type: 'string',
-    },
-    {
-      name: 'profileImg',
-      title: 'Profile Image',
-      type: 'string',
-    },
-    {
       name: 'image',
       title: 'Tweet Image',
       type: 'string',
     },
     {
-      name: 'like',
+      name: 'user',
+      title: 'User',
+      description: 'Reference to User the comment is associated with:',
+      type: 'reference',
+      to: {
+        type: 'user'
+      }
+    },
+    {
+      name: 'likes',
       title: 'No. of likes',
       type: 'number',
     },

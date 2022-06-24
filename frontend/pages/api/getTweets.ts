@@ -7,7 +7,13 @@ import { groq } from "next-sanity";
 const feedQuery = groq`
 *[_type=="tweet" && !blockTweet]{
     _id,
-    ...
+    _createdAt,
+    _type,
+    likes,
+    text,
+    image,
+    "username":user->name,
+    "userimg":user->image
   } | order(_createdAt desc)
 `
 

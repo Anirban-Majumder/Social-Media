@@ -17,11 +17,13 @@ export default async function handler(
                 create: {
                     _type: 'tweet',
                     text: data.text,
-                    username: data.username,
                     blockTweet: false,
-                    profileImg: data.profileImg,
                     image: data.image,
-                    like: 0
+                    likes: 0,
+                    user: {
+                        _type: 'reference',
+                        _ref: data.username,
+                    },
                 }
             }
         ]

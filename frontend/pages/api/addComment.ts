@@ -18,8 +18,10 @@ export default async function handler(
                 create: {
                     _type: 'comment',
                     comment: comment.comment,
-                    username: comment.username,
-                    profileImg: comment.profileImg,
+                    user:{
+                        _type: 'reference',
+                        _ref: comment.username,
+                    },
                     tweet: {
                         _type: 'reference',
                         _ref: comment.tweetId

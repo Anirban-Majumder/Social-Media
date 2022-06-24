@@ -1,31 +1,34 @@
 export interface Tweet extends TweetBody {
     _id: string
     _createdAt: string
-    _updatedAt: string
-    _rev: string
     _type: 'tweet'
-    blockTweet: boolean
-    like: number
+    likes: number
 }
 export type TweetBody = {
-    text: string,
-    username: string,
-    profileImg: string,
+    text: string
+    username: string
+    userimg: string
     image?: string
 }
 
 export interface Comment extends CommentBody {
     _id: string
     _createdAt: string
-    _updatedAt: string
-    _rev: string
-    type: 'tweet'
+    type: 'comment'
 }
 
 export type CommentBody = {
     comment: string
     tweetId: string
-    profileImg: string
     username: string
-    
+    userimg: string
+}
+
+export type User ={
+    _id: string
+}
+
+export type Like = {
+    userId: string
+    tweetId: string
 }
