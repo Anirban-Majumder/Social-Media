@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import { Comment, CommentBody, Like, Tweet} from '../typings'
 import TimeAgo from 'react-timeago'
@@ -10,7 +11,7 @@ import toast from 'react-hot-toast'
 import { fetchComments } from '../utils/fetchComments'
 import {fetchUserId} from '../utils/fetchUserId'
 import { fetchLikes } from '../utils/fetchLikes'
-import { join } from 'path'
+
 
 interface Props {
   tweet: Tweet
