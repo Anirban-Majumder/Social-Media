@@ -1,8 +1,6 @@
 import React, { useRef, useState } from 'react'
 import {
-    CalendarIcon,
     EmojiHappyIcon,
-    LocationMarkerIcon,
     PhotographIcon,
     SearchCircleIcon
 } from "@heroicons/react/outline";
@@ -69,24 +67,22 @@ function TweetBox({ setTweets }: Props) {
                     <input 
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    type="text" placeholder="What's Happening" className='outline-none h-24 w-full text-xl placeholder:text-xl p-6 bg-slate-100 rounded-lg mb-6' />
+                    type="text" placeholder="What's Happening" className='outline-none h-24 w-full text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:p-8 md:text-xl md:placeholder:text-xl' />
                     <div className='flex items-center'>
                         <div className='flex flex-1 space-x-2 text-twitter'>
                             {/* Icons */}
                             <PhotographIcon onClick={() => setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)} className='h-5 w-5 cursor-pointer transition transform duration-500 ease-out hover:scale-110' />
                             <SearchCircleIcon className='h-5 w-5' />
                             <EmojiHappyIcon className='h-5 w-5' />
-                            <CalendarIcon className='h-5 w-5' />
-                            <LocationMarkerIcon className='h-5 w-5' />
                         </div>
                         <button 
                         onClick={handleSubmit}
                         disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Post</button>
                     </div>
                     {imageUrlBoxIsOpen && (
-                        <form className='mt-5 flex rounded-lg bg-twitter/80 py-2 px-4'>
-                            <input ref={imageInputRef} className='flex-1 bg-transparent p-2 text-white outline-none placeholder:text-white' type="text" placeholder='Enter Image Url'/>
-                            <button onClick={addImageToTweet} type="submit" className='font-bold text-white rounded-lg'>Add Image</button>
+                        <form className='mt-5 flex rounded-lg bg-boxcolor py-2 px-4'>
+                            <input ref={imageInputRef} className='flex-1 bg-transparent p-2 outline-none placeholder:text-textgrey' type="text" placeholder='Enter Image Url'/>
+                            <button onClick={addImageToTweet} type="submit" className='font-bold text-twitter rounded-lg'>Add Image</button>
                         </form>
                     )}
                     {image && 

@@ -10,7 +10,7 @@ export default function Header() {
       <div className='hidden'></div>
       :
       <div className='block w-80% h-16 ml-4 mr-4 '>
-        <div className='relative top-0 opacity-100 overflow-hidden m-0 bg-slate-100 rounded-b-lg py-2 px-4'>
+        <div className='relative top-0 opacity-100 overflow-hidden m-0 bg-boxcolor rounded-b-lg py-2 px-4'>
               <span className='absolute p-3 leading-5 '>
                 You are not signed in
               </span>

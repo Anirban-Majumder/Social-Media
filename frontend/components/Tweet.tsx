@@ -33,19 +33,14 @@ function Tweet({ tweet }: Props) {
 
   const refreshliked = async () => {
     SetChecklike(true)
-
-    //console.log(status)
-    //console.log(session)
     const value: boolean = await fetchLikes(tweet._id, session?.user?.email)
-    //console.log(input)
-    console.log('refreshinglike')
+    //console.log('refreshinglike')
     setLiked(value)
 
   }
   //useEffect(() => {
   //  refreshliked()
   //}, [checklike])
-
 
   useEffect(() => {
     refreshComments()
@@ -97,9 +92,9 @@ function Tweet({ tweet }: Props) {
   return (
     <div
       key={tweet._id}
-      className="flex flex-col space-x-3 border-y border-gray-100 p-5"
+      className="flex flex-col space-x-3 border-y border-bordercolor p-5"
     >
-      <div className="flex space-x-3">
+      <div className="flex space-x-3 overflow-hidden">
         <img
           className="h-10 w-10 rounded-full object-cover"
           src={tweet.userimg || '/profile.jpg'}
@@ -109,17 +104,17 @@ function Tweet({ tweet }: Props) {
         <div>
           <div className="flex items-center space-x-1">
             <p className="mr-1 font-bold">{tweet.username}</p>
-            <p className="hidden text-sm text-gray-500 sm:inline">
+            <p className="hidden text-sm text-textgray sm:inline">
               @{tweet.username.replace(/\s+/g, '').toLowerCase()} ·
             </p>
 
             <TimeAgo
-              className="text-sm text-gray-500"
+              className="text-sm text-textgray"
               date={tweet._createdAt}
             />
           </div>
 
-          <p className="pt-1">{tweet.text}</p>
+          <p className="pt-1 break-word">{tweet.text}</p>
 
           {tweet.image && (
             <img
@@ -134,13 +129,13 @@ function Tweet({ tweet }: Props) {
       <div className="mt-5 flex justify-between">
         <div
           onClick={(e) => session && setCommentBoxVisible(!commentBoxVisible)}
-          className="flex cursor-pointer items-center ml-10 text-gray-400"
+          className="flex cursor-pointer items-center ml-10 text-textgray"
         >
           <ChatAlt2Icon className="h-5 w-5" />
           <p>{comments.length}</p>
         </div>
         {!liked && (
-        <div className="flex cursor-pointer items-center mr-10 text-gray-400"
+        <div className="flex cursor-pointer items-center mr-10 text-textgray"
           onClick={(j) => session && handleLike()}>
           <HeartIcon className="h-5 w-5" />
           <p>{tweet.likes===0?" ":tweet.likes}</p>
@@ -159,13 +154,13 @@ function Tweet({ tweet }: Props) {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 rounded-lg bg-slate-100 p-2 outline-none"
+            className="flex-1 rounded-lg bg-boxcolor p-2 outline-none placeholder:text-textgray"
             type="text"
             placeholder="Write a comment..."
           />
           <button
             disabled={!input}
-            className="text-twitter disabled:text-gray-200"
+            className="text-twitter disabled:text-textgray"
             type="submit"
           >
             Post
@@ -174,7 +169,7 @@ function Tweet({ tweet }: Props) {
       )}
 
       {comments?.length > 0 && (
-        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5 scrollbar-hide">
+        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-bordercolor p-5 scrollbar-hide">
           {comments.map((comment) => (
             <div key={comment._id} className="relative flex space-x-2">
               <hr className="absolute left-5 top-10 h-8 border-x border-twitter/30" />
@@ -186,12 +181,12 @@ function Tweet({ tweet }: Props) {
               <div>
                 <div className="flex items-center space-x-1">
                   <p className="mr-1 font-bold">{comment.username}</p>
-                  <p className="hidden text-sm text-gray-500 lg:inline">
+                  <p className="hidden text-sm text-textgray lg:inline">
                     @{comment.username.replace(/\s+/g, '').toLowerCase()} ·
                   </p>
 
                   <TimeAgo
-                    className="text-sm text-gray-500"
+                    className="text-sm text-textgray"
                     date={comment._createdAt}
                   />
                 </div>
