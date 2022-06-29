@@ -16,8 +16,12 @@ const Home = ({ tweets }: Props) => {
 	return (
 		<div className="lg:max-w-7xl mx-auto max-h-screen overflow-hidden">
 			<Head>
-				<title>SOcial</title>
+				<title>Ani's Place</title>
         		<link rel="icon" href="/logo.png" />
+				<meta content="Ani's Place " property="og:title"/>
+				<meta content="/white_logo.png" property="og:image"/>
+        		<meta content="Welcome to Ani's Place. This is a Social Media like Twitter and Instagram. Come check it Out!" name="description"/>
+				<meta content="Welcome to Ani's Place. This is a Social Media like Twitter and Instagram. Come check it Out!" name="og:description"/>
 			</Head>
 			<Toaster/>
 			<Header/>

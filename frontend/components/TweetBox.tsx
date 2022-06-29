@@ -38,17 +38,15 @@ function TweetBox({ setTweets }: Props) {
     
     const uploadFromClient = async (event:any) => {
 
-        const notii =toast.loading('Uploading...', )
         await  waitFor((_:any) =>event.target.files.length!==0)
         const selectedFile = event.target.files[0]
-
         if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' 
             || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' 
             || selectedFile.type === 'image/tiff' || selectedFile.type === 'image/webp'
             && selectedFile.size < 1024 * 1024 * 9) {
-            
+            const notii =toast.loading('Uploading...', )
             setPlaceholder('Give a Title...')
-       
+            
             const formData = new FormData()
             formData.append('file', selectedFile)
             formData.append('upload_preset', 'my-uploads')
@@ -57,7 +55,6 @@ function TweetBox({ setTweets }: Props) {
             method: 'POST',
             body: formData
             }).then(r => r.json())
-
             setImage(data.secure_url)
             setLoading(false)
             toast.success('Uploaded!',{id:notii})
@@ -65,9 +62,9 @@ function TweetBox({ setTweets }: Props) {
                 toast.error('Server Too Busy!',{id:notii})
             }
         } else {
-            toast.error('Invalid File Type!',{id:notii})
+            toast.error('Invalid File Type!')
         }
-    }
+    }   
 
     const onEmojiClick = (event:any , emojiObject:any) => {
         setInput(input+emojiObject.emoji)
@@ -135,7 +132,9 @@ function TweetBox({ setTweets }: Props) {
                             <label htmlFor="upload-button">
                                 <PhotographIcon  className='h-5 w-5' />
                             </label>
+                            {session &&
                             <input id="upload-button" type="file" style={{ display: 'none' }} onClick={uploadFromClient}/>
+                            }
                             <SearchCircleIcon onClick={() => setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)} className='h-5 w-5 cursor-pointer transition transform duration-500 ease-out hover:scale-110' />
                             <EmojiHappyIcon className='h-5 w-5' onClick={() => setEmojiPickerIsOpen(!emojiPickerIsOpen)}/>
                         </div>
