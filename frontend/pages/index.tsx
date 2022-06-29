@@ -20,8 +20,8 @@ const Home = ({ tweets }: Props) => {
         		<link rel="icon" href="/logo.png" />
 				<meta content="Ani's Place " property="og:title"/>
 				<meta content="/white_logo.png" property="og:image"/>
-        		<meta content="Hi, Welcome to Ani's Place. This is a Social Media. Come check it Out!" name="description"/>
-				<meta content="Hi, Welcome to Ani's Place. This is a Social Media. Come check it Out!" name="og:description"/>
+        		<meta content="Welcome to Ani's Place. This is a Social Media like Twitter and Instagram. Come check it Out!" name="description"/>
+				<meta content="Welcome to Ani's Place. This is a Social Media like Twitter and Instagram. Come check it Out!" name="og:description"/>
 			</Head>
 			<Toaster/>
 			<Header/>
