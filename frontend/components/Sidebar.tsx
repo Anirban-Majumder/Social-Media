@@ -10,6 +10,7 @@ import {
     InformationCircleIcon,
     NewspaperIcon,
     SparklesIcon,
+    XCircleIcon
  } from "@heroicons/react/outline"
 import SidebarRow from './SidebarRow'
 import toast from 'react-hot-toast'
@@ -24,15 +25,12 @@ function Sidebar() {
   function more() { return toast.custom((t) => (
   <div
     className={`${t.visible ? 'animate-enter' : 'animate-leave'}
-    pl-10  bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col ring-1 ring-black ring-opacity-5 lg:hidden`}>
+    pl-10  bg-white shadow-lg rounded-md pointer-events-auto flex flex-col ring-1 ring-black ring-opacity-5 lg:hidden`}>
     <>
         <div className='col-span-2 flex max-w-fit space-x-2 px-1 py-4 rounded-full'>
         <FireIcon className='relative h-8 w-8 top-3'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-normal'>Here Are Some <br></br>Awesome Links:</p>
-        <button onClick={() => toast.dismiss(t.id)}
-        className="w-8 h-8 inline text-large font-bold rounded-full 
-        bg-blue-500 hover:bg-red-500 text-white object-center  px-2 "
-        >   X  </button>
+        <XCircleIcon className='h-8 w-8 inline object-center' onClick={() => toast.dismiss(t.id)}/>
         </div>
         <div onClick={() => window.open('https://www.anirbanmajumder.tech/')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor cursor-pointer transition duration-200 group'>
         <SparklesIcon className='h-6 w-6'/>
