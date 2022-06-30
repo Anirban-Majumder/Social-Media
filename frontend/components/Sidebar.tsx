@@ -30,7 +30,7 @@ function Sidebar() {
         <div className='col-span-2 flex max-w-fit space-x-2 px-1 py-4 rounded-full'>
         <FireIcon className='relative h-8 w-8 top-3'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-normal'>Here Are Some <br></br>Awesome Links:</p>
-        <XCircleIcon className='h-8 w-8 inline object-center' onClick={() => toast.dismiss(t.id)}/>
+        <XCircleIcon className='h-8 w-8 inline object-center pt-1' onClick={() => toast.dismiss(t.id)}/>
         </div>
         <div onClick={() => window.open('https://www.anirbanmajumder.tech/')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor cursor-pointer transition duration-200 group'>
         <SparklesIcon className='h-6 w-6'/>
