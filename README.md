@@ -1,4 +1,4 @@
-##Ani's Place
+## Ani's Place
 
 This is the code of both the frontend and backend of the project.
 This is a social media similar to Twitter and Instagram. You can create a new account, login, and post messages.
