@@ -11,6 +11,7 @@ import { fetchUserId } from '../utils/fetchUserId'
 import toast from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false })
+import {EmojiStyle, EmojiClickData} from "emoji-picker-react";
 
 
 interface Props {
@@ -32,21 +33,21 @@ function TweetBox({ setTweets }: Props) {
         const poll = (resolve:any) => {
           if(conditionFunction()) resolve()
           else setTimeout((_:any) => poll(resolve), 400)
-        } 
+        }
         return new Promise(poll)
     }
-    
+
     const uploadFromClient = async (event:any) => {
 
         await  waitFor((_:any) =>event.target.files.length!==0)
         const selectedFile = event.target.files[0]
-        if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg' 
-            || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif' 
+        if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg'
+            || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif'
             || selectedFile.type === 'image/tiff' || selectedFile.type === 'image/webp'
             && selectedFile.size < 1024 * 1024 * 9) {
             const notii =toast.loading('Uploading...', )
             setPlaceholder('Give a Title...')
-            
+
             const formData = new FormData()
             formData.append('file', selectedFile)
             formData.append('upload_preset', 'my-uploads')
@@ -64,10 +65,10 @@ function TweetBox({ setTweets }: Props) {
         } else {
             toast.error('Invalid File Type!')
         }
-    }   
+    }
 
-    const onEmojiClick = (event:any , emojiObject:any) => {
-        setInput(input+emojiObject.emoji)
+    const onEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
+        setInput(input+emojiData.emoji)
         setEmojiPickerIsOpen(false)
     }
 
@@ -81,12 +82,12 @@ function TweetBox({ setTweets }: Props) {
         setImageUrlBoxIsOpen(false)
         setPlaceholder('Give a Title...')
     }
-    
+
     const postTweet = async () => {
 
         const noti =toast.loading('Posting...', )
         const user = await fetchUserId(session?.user?.email)
-		
+
         const tweetBody: TweetBody = {
             text: input,
             username: user || "Unknown User",
@@ -122,7 +123,7 @@ function TweetBox({ setTweets }: Props) {
             <img className='h-14 w-14 object-cover rounded-full mt-4' src={session?.user?.image || "/profile.jpg"} alt="" />
             <div className='flex flex-1 pl-2'>
                 <form className='flex flex-1 flex-col'>
-                    <input 
+                    <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     type="text" placeholder={placeholder} className='outline-none h-24 w-full text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl' />
@@ -138,24 +139,24 @@ function TweetBox({ setTweets }: Props) {
                             <SearchCircleIcon onClick={() => setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)} className='h-5 w-5 cursor-pointer transition transform duration-500 ease-out hover:scale-110' />
                             <EmojiHappyIcon className='h-5 w-5' onClick={() => setEmojiPickerIsOpen(!emojiPickerIsOpen)}/>
                         </div>
-                        <button 
+                        <button
                         onClick={handleSubmit}
                         disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Post</button>
-                    </div> 
+                    </div>
                     {image && !loading &&
                         <img src={image} className='mt-10 h-40 w-full rounded-xl object-contain shadow-lg'/>
                     }
                 </form>
             </div>
             {emojiPickerIsOpen && (
-                <Picker onEmojiClick={onEmojiClick} groupVisibility={{flags: false,}} native={true} disableSearchBar={true} />    
+                <Picker onEmojiClick={onEmojiClick} searchDisabled={true} emojiStyle={EmojiStyle.NATIVE} skinTonesDisabled={true} />
             )}
             {imageUrlBoxIsOpen && (
                 <form className='flex flex-1 flex-col'>
                     <input ref={imageInputRef} type="text" placeholder='Enter Image Url'
                     className='outline-none h-20 mt-4 text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl'/>
                     <div className='flex'>
-                        <button onClick={addImageToTweet} type="submit" 
+                        <button onClick={addImageToTweet} type="submit"
                         disabled={!session} className='bg-twitter ml-2 px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Add Image</button>
                     </div>
                 </form>

@@ -9,6 +9,7 @@
 
 # testing
 /coverage
+/frontendold
 
 # next.js
 /.next/
