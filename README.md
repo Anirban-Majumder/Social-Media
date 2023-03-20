@@ -7,4 +7,4 @@ You can also see other users and see their posts. You can also like and comment 
 It is made using Nextjs, React and TailwindCSS as the front end and cloudnarity and Sanity as the backend.
 
 
-Check it out at [https://mediasocial.vercel.app/](https://mediasocial.vercel.app/)
+Check it out at [https://social-anirbanmajumder.vercel.app](https://social-anirbanmajumder.vercel.app)
