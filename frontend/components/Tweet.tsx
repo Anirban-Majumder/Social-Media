@@ -36,8 +36,17 @@ function Tweet({ tweet }: Props) {
     const value: boolean = await fetchLikes(tweet._id, session?.user?.email)
     //console.log('refreshinglike')
     setLiked(value)
-
   }
+
+  const formatter = (value, unit, suffix) => {
+    if (unit === 'second') {
+        return 'less then a minute ago';
+    }
+    return `${value} ${unit}${
+        value !== 1 ? 's' : ''
+    } ${suffix}`;
+  }
+
   //useEffect(() => {
   //  refreshliked()
   //}, [checklike])
@@ -111,6 +120,7 @@ function Tweet({ tweet }: Props) {
             <TimeAgo
               className="text-sm text-textgray"
               date={tweet._createdAt}
+              formatter={formatter}
             />
           </div>
 
@@ -145,7 +155,7 @@ function Tweet({ tweet }: Props) {
         <div className="flex cursor-pointer items-center mr-10">
           <HeartIcon className="h-5 w-5 fill-red-600" />
           <p>{tweet.likes+1}</p>
-        </div>  
+        </div>
         )}
       </div>
 
@@ -188,6 +198,7 @@ function Tweet({ tweet }: Props) {
                   <TimeAgo
                     className="text-sm text-textgray"
                     date={comment._createdAt}
+                    formatter={formatter}
                   />
                 </div>
                 <p>{comment.comment}</p>
