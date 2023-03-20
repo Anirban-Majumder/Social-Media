@@ -17,7 +17,7 @@ function Widgets() {
         <SparklesIcon className='h-6 w-6'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>My Website</p>
         </div>
-        <div onClick={() => window.open('https://anirbanmajumder.vercel.app/about')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor cursor-pointer transition duration-200 group'>
+        <div onClick={() => window.open('https://anirbanmajumder.vercel.app/about.html')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor cursor-pointer transition duration-200 group'>
         <InformationCircleIcon className='h-6 w-6'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>About Me</p>
         </div>

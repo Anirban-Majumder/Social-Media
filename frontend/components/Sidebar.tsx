@@ -36,7 +36,7 @@ function Sidebar() {
         <SparklesIcon className='h-6 w-6'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>My Website</p>
         </div>
-        <div onClick={() => window.open('https://anirbanmajumder.vercel.app/about')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor cursor-pointer transition duration-200 group'>
+        <div onClick={() => window.open('https://anirbanmajumder.vercel.app/about.html')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor cursor-pointer transition duration-200 group'>
         <InformationCircleIcon className='h-6 w-6'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>About Me</p>
         </div>
@@ -62,7 +62,7 @@ function Sidebar() {
         <SidebarRow Icon={HashtagIcon} title="Explore" onClick={explore}/>
         <SidebarRow Icon={BellIcon} title="Notifications" onClick={notification}/>
         <SidebarRow Icon={UserIcon} onClick={!session ? signIn : signOut} title={session ? 'Sign Out' : 'Sign In'}/>
-        <SidebarRow Icon={DotsCircleHorizontalIcon} onClick={more} title="More"/>
+        <SidebarRow Icon={DotsCircleHorizontalIcon} onClick={more} title="More" extra='lg:hidden'/>
     </div>
   )
 }
