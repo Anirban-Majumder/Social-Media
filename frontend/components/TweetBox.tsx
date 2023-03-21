@@ -11,7 +11,7 @@ import { fetchUserId } from '../utils/fetchUserId'
 import toast from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false })
-import {EmojiStyle, EmojiClickData} from "emoji-picker-react";
+import {EmojiStyle, EmojiClickData, Theme} from "emoji-picker-react";
 import { useTheme } from 'next-themes'
 
 
@@ -26,7 +26,7 @@ function TweetBox({ setTweets }: Props) {
     const [loading, setLoading] = useState(true)
     const [placeholder, setPlaceholder] = useState<string>('What\'s happening?')
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false)
-    const imageInputRef = useRef<HTMLInputElement>(null)
+    const [imageLink, setImageLink] = useState<string>('')
     const [emojiPickerIsOpen, setEmojiPickerIsOpen] = useState<boolean>(false)
     const {theme, setTheme} = useTheme()
 
@@ -37,6 +37,14 @@ function TweetBox({ setTweets }: Props) {
           else setTimeout((_:any) => poll(resolve), 400)
         }
         return new Promise(poll)
+    }
+
+    async function checkImage(url:string){
+        const res = await fetch(url);
+        const buff = await res.blob();
+        if(buff.type.startsWith('image/')){
+            return true;
+        }
     }
 
     const uploadFromClient = async (event:any) => {
@@ -74,14 +82,12 @@ function TweetBox({ setTweets }: Props) {
         setEmojiPickerIsOpen(false)
     }
 
-    const addImageToTweet = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    async function addImageLink(e: React.MouseEvent<HTMLButtonElement, MouseEvent>){
         e.preventDefault()
-        console.log(imageInputRef.current?.value)
-        if(!imageInputRef.current?.value) return
-        setImage(imageInputRef.current.value)
+        await checkImage(imageLink)? setImage(imageLink) : toast.error('Invalid Image Link!')
         setLoading(false)
-        imageInputRef.current.value = ''
         setImageUrlBoxIsOpen(false)
+        setImageLink('')
         setPlaceholder('Give a Title...')
     }
 
@@ -151,15 +157,15 @@ function TweetBox({ setTweets }: Props) {
                 </form>
             </div>
             {emojiPickerIsOpen && (
-                <Picker onEmojiClick={onEmojiClick} searchDisabled={true} emojiStyle={EmojiStyle.NATIVE} skinTonesDisabled={true} />
+                <Picker onEmojiClick={onEmojiClick} width={300} height={350} searchDisabled={true} emojiStyle={EmojiStyle.NATIVE} skinTonesDisabled={true} theme={theme === 'dark'?Theme.DARK:Theme.LIGHT} />
             )}
             {imageUrlBoxIsOpen && (
                 <form className='flex flex-1 flex-col'>
-                    <input ref={imageInputRef} type="text" placeholder='Enter Image Url'
+                    <input value={imageLink}  onChange={(e) => setImageLink(e.target.value)} type="text" placeholder='Enter Image Url'
                     className='outline-none h-20 mt-4 text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl dark:bg-darkboxcolor'/>
                     <div className='flex'>
-                        <button onClick={addImageToTweet} type="submit"
-                            className={!(!imageInputRef.current || !session) ?
+                        <button onClick={addImageLink} type="submit"
+                            className={!(!imageLink || !session) ?
                             'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
                             'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Add Image</button>
                     </div>
