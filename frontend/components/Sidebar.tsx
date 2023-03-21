@@ -25,6 +25,7 @@ import {useTheme} from 'next-themes'
 function Sidebar() {
   const { data: session } = useSession()
   const {theme, setTheme} = useTheme()
+  var popup = false
 
   const [hasMounted, setHasMounted] = React.useState(false);
   React.useEffect(() => {
@@ -34,7 +35,10 @@ function Sidebar() {
     return null;
   }
 
-  function more() { return toast.custom((t) => (
+  function more() {
+    if(popup === true) {return 0}
+    popup = true
+    return toast.custom((t) => (
   <div
     className={`${t.visible ? 'animate-enter' : 'animate-leave'}
     pl-10  bg-boxcolor shadow-lg rounded-md pointer-events-auto flex flex-col ring-1 ring-black ring-opacity-5 dark:bg-darkboxcolor dark:ring-white`}>
@@ -42,22 +46,22 @@ function Sidebar() {
         <div className='col-span-2 flex max-w-fit space-x-2 px-1 py-4 rounded-full'>
         <FireIcon className='relative h-8 w-8 top-3'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-normal'>Here Are Some <br></br>Awesome Links:</p>
-        <XCircleIcon className='h-8 w-8 inline object-center pt-1' onClick={() => toast.dismiss(t.id)}/>
+        <XCircleIcon className='h-8 w-8 inline object-center pt-1' onClick={() => {popup=false; toast.dismiss(t.id)}}/>
         </div>
         <div onClick={() => window.open('https://anirbanmajumder.vercel.app/')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor dark:hover:bg-zinc-900 cursor-pointer transition duration-200 group'>
-        <SparklesIcon className='h-6 w-6'/>
+        <SparklesIcon className='h-6 w-6 lg:h-7 lg:w-7'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>My Website</p>
         </div>
         <div onClick={() => window.open('https://anirbanmajumder.vercel.app/about.html')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor dark:hover:bg-zinc-900 cursor-pointer transition duration-200 group'>
-        <InformationCircleIcon className='h-6 w-6'/>
+        <InformationCircleIcon className='h-6 w-6 lg:h-7 lg:w-7'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>About Me</p>
         </div>
         <div onClick={() => window.open('https://blog-anirbanmajumder0.vercel.app/')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor dark:hover:bg-zinc-900 cursor-pointer transition duration-200 group'>
-        <NewspaperIcon className='h-6 w-6'/>
+        <NewspaperIcon className='h-6 w-6 lg:h-7 lg:w-7'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>My Blog</p>
         </div>
         <div onClick={() => window.open('mailto: anirbanchess2015@gmail.com')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor dark:hover:bg-zinc-900 cursor-pointer transition duration-200 group'>
-        <MailIcon className='h-6 w-6'/>
+        <MailIcon className='h-6 w-6 lg:h-7 lg:w-7'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-light'>Contact Me</p>
         </div>
     </>
