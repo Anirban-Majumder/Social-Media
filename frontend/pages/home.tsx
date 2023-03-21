@@ -14,6 +14,7 @@ interface Props {
 
 const Home = ({ tweets }: Props) => {
 	return (
+		<div className='dark:bg-darkgrey'>
 		<div className="lg:max-w-7xl mx-auto max-h-screen overflow-hidden">
 			<Head>
 				<title>Ani's Place</title>
@@ -31,8 +32,10 @@ const Home = ({ tweets }: Props) => {
 				<Widgets/>
 			</main>
 		</div>
+		</div>
 	)
 }
+
 
 export default Home
 export const getServerSideProps: GetServerSideProps = async (context) => {

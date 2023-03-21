@@ -14,6 +14,7 @@ interface Props {
 
 const Home = ({ tweets }: Props) => {
 	return (
+		<div className='dark:bg-darkgrey'>
 		<div className="lg:max-w-7xl mx-auto max-h-screen overflow-hidden">
 			<Head>
 				<title>Ani's Place</title>
@@ -30,6 +31,7 @@ const Home = ({ tweets }: Props) => {
 				<Feed tweets={tweets}/>
 				<Widgets/>
 			</main>
+		</div>
 		</div>
 	)
 }

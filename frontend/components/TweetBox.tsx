@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false })
 import {EmojiStyle, EmojiClickData} from "emoji-picker-react";
+import { useTheme } from 'next-themes'
 
 
 interface Props {
@@ -27,6 +28,7 @@ function TweetBox({ setTweets }: Props) {
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false)
     const imageInputRef = useRef<HTMLInputElement>(null)
     const [emojiPickerIsOpen, setEmojiPickerIsOpen] = useState<boolean>(false)
+    const {theme, setTheme} = useTheme()
 
 
     function waitFor(conditionFunction:any) {
@@ -44,7 +46,7 @@ function TweetBox({ setTweets }: Props) {
         if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg'
             || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif'
             || selectedFile.type === 'image/tiff' || selectedFile.type === 'image/webp'
-            && selectedFile.size < 1024 * 1024 * 9) {
+            || selectedFile.type === 'image/jpg' && selectedFile.size < 1024 * 1024 * 9) {
             const notii =toast.loading('Uploading...', )
             setPlaceholder('Give a Title...')
 
@@ -120,13 +122,13 @@ function TweetBox({ setTweets }: Props) {
 
     return (
         <div className='flex space-x-2 p-5 flex-wrap'>
-            <img className='h-14 w-14 object-cover rounded-full mt-4' src={session?.user?.image || "/profile.jpg"} alt="" />
+            <img className='h-14 w-14 object-cover rounded-full mt-4' src={session?.user?.image || (theme === 'dark'? "/profiledark.jpg" : "/profile.jpg")} alt="" />
             <div className='flex flex-1 pl-2'>
                 <form className='flex flex-1 flex-col'>
                     <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    type="text" placeholder={placeholder} className='outline-none h-24 w-full text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl' />
+                    type="text" placeholder={placeholder} className='outline-none h-24 w-full text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl dark:bg-darkboxcolor' />
                     <div className='flex items-center'>
                         <div className='flex flex-1 space-x-2 text-twitter'>
                             {/* Icons */}
@@ -141,7 +143,7 @@ function TweetBox({ setTweets }: Props) {
                         </div>
                         <button
                         onClick={handleSubmit}
-                        disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Post</button>
+                        disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300'>Post</button>
                     </div>
                     {image && !loading &&
                         <img src={image} className='mt-10 h-40 w-full rounded-xl object-contain shadow-lg'/>
@@ -154,7 +156,7 @@ function TweetBox({ setTweets }: Props) {
             {imageUrlBoxIsOpen && (
                 <form className='flex flex-1 flex-col'>
                     <input ref={imageInputRef} type="text" placeholder='Enter Image Url'
-                    className='outline-none h-20 mt-4 text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl'/>
+                    className='outline-none h-20 mt-4 text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl dark:bg-darkboxcolor'/>
                     <div className='flex'>
                         <button onClick={addImageToTweet} type="submit"
                         disabled={!session} className='bg-twitter ml-2 px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Add Image</button>

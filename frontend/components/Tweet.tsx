@@ -141,13 +141,13 @@ function Tweet({ tweet }: Props) {
           onClick={(e) => session && setCommentBoxVisible(!commentBoxVisible)}
           className="flex cursor-pointer items-center ml-10 text-textgray"
         >
-          <ChatAlt2Icon className="h-5 w-5" />
+          <ChatAlt2Icon className="h-5 w-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" />
           <p>{comments.length}</p>
         </div>
         {!liked && (
         <div className="flex cursor-pointer items-center mr-10 text-textgray"
           onClick={(j) => session && handleLike()}>
-          <HeartIcon className="h-5 w-5" />
+          <HeartIcon className="h-5 w-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:text-red-700 duration-300" />
           <p>{tweet.likes===0?" ":tweet.likes}</p>
         </div>
         )}
