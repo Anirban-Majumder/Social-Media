@@ -19,13 +19,10 @@ import toast from 'react-hot-toast'
 import Router from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import {useTheme} from 'next-themes'
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
 
 
 
 function Sidebar() {
-  const level = useContext(LevelContext);
   const { data: session } = useSession()
   const {theme, setTheme} = useTheme()
   var popup = false

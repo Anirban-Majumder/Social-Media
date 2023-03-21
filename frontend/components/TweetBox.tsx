@@ -76,7 +76,7 @@ function TweetBox({ setTweets }: Props) {
 
     const addImageToTweet = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        console.log(imageInputRef.current?.value)
+        console.log(imageInputRef)
         if(!imageInputRef.current?.value) return
         setImage(imageInputRef.current.value)
         setLoading(false)
@@ -130,20 +130,20 @@ function TweetBox({ setTweets }: Props) {
                     onChange={(e) => setInput(e.target.value)}
                     type="text" placeholder={placeholder} className='outline-none h-24 w-full text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl dark:bg-darkboxcolor' />
                     <div className='flex items-center'>
-                        <div className='flex flex-1 space-x-4 text-twitter'>
+                        <div className='flex flex-1 space-x-2 text-twitter'>
                             {/* Icons */}
                             <label htmlFor="upload-button">
-                                <PhotographIcon onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(false)}} className='h-5 w-5 md:h-7 md:w-7 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300'/>
+                                <PhotographIcon  className='h-5 w-5' />
                             </label>
                             {session &&
                             <input id="upload-button" type="file" style={{ display: 'none' }} onClick={uploadFromClient}/>
                             }
-                            <SearchCircleIcon onClick={() => {setEmojiPickerIsOpen(false);setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300' />
-                            <EmojiHappyIcon  onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(!emojiPickerIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300'/>
+                            <SearchCircleIcon onClick={() => setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)} className='h-5 w-5 cursor-pointer transition transform duration-500 ease-out hover:scale-110' />
+                            <EmojiHappyIcon className='h-5 w-5' onClick={() => setEmojiPickerIsOpen(!emojiPickerIsOpen)}/>
                         </div>
-                        <button onClick={handleSubmit} className={!(!input || !session) ?
-                        'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
-                        'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Post</button>
+                        <button
+                        onClick={handleSubmit}
+                        disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300'>Post</button>
                     </div>
                     {image && !loading &&
                         <img src={image} className='mt-10 h-40 w-full rounded-xl object-contain shadow-lg'/>
@@ -159,9 +159,7 @@ function TweetBox({ setTweets }: Props) {
                     className='outline-none h-20 mt-4 text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl dark:bg-darkboxcolor'/>
                     <div className='flex'>
                         <button onClick={addImageToTweet} type="submit"
-                            className={!(!imageInputRef.current || !session) ?
-                            'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
-                            'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Add Image</button>
+                        disabled={!session} className='bg-twitter ml-2 px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Add Image</button>
                     </div>
                 </form>
             )}
