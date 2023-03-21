@@ -5,11 +5,14 @@ import TweetBox from './TweetBox'
 import TweetComponent from './Tweet'
 import { fetchTweets } from '../utils/fetchTweets'
 import toast from 'react-hot-toast'
+import { useContext } from 'react';
+import { LevelContext } from './LevelContext.js';
 
 interface Props {
 	tweets: Tweet[]
 }
 function Feed({ tweets: tweetsProp }: Props) {
+	const level = useContext(LevelContext);
 	const [tweets, setTweets] = useState(tweetsProp)
 
 	const handleRefresh = async () => {
