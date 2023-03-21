@@ -139,16 +139,16 @@ function TweetBox({ setTweets }: Props) {
                         <div className='flex flex-1 space-x-4 text-twitter'>
                             {/* Icons */}
                             <label htmlFor="upload-button">
-                                <PhotographIcon onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(false)}} className='h-5 w-5 md:h-7 md:w-7 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300'/>
+                                <PhotographIcon onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(false)}} className='h-5 w-5 md:h-7 md:w-7 transition ease-in-out  hover:-translate-y-1 hover:scale-110  duration-300'/>
                             </label>
                             {session &&
                             <input id="upload-button" type="file" style={{ display: 'none' }} onClick={uploadFromClient}/>
                             }
-                            <SearchCircleIcon onClick={() => {setEmojiPickerIsOpen(false);setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300' />
-                            <EmojiHappyIcon  onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(!emojiPickerIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300'/>
+                            <SearchCircleIcon onClick={() => {setEmojiPickerIsOpen(false);setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out  hover:-translate-y-1 hover:scale-110  duration-300' />
+                            <EmojiHappyIcon  onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(!emojiPickerIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out  hover:-translate-y-1 hover:scale-110  duration-300'/>
                         </div>
                         <button onClick={handleSubmit} className={!(!input || !session) ?
-                        'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
+                        'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out  hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
                         'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Post</button>
                     </div>
                     {image && !loading &&
@@ -166,7 +166,7 @@ function TweetBox({ setTweets }: Props) {
                     <div className='flex'>
                         <button onClick={addImageLink} type="submit"
                             className={!(!imageLink || !session) ?
-                            'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
+                            'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out  hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
                             'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Add Image</button>
                     </div>
                 </form>

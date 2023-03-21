@@ -16,7 +16,7 @@ export default function Header() {
               </span>
               <a
                 href={`/api/auth/signin`}
-                className='py-2 px-4 float-right -mr-1 font-medium text-white rounded-md cursor-pointer leading-6 relative z-10 bg-twitter transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300'
+                className='py-2 px-4 float-right -mr-1 font-medium text-white rounded-md cursor-pointer leading-6 relative z-10 bg-twitter transition ease-in-out  hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300'
                 onClick={(e) => {
                   e.preventDefault()
                   signIn()

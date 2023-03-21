@@ -139,21 +139,21 @@ function Tweet({ tweet }: Props) {
       <div className="mt-5 flex justify-between">
         <div
           onClick={(e) => session && setCommentBoxVisible(!commentBoxVisible)}
-          className="flex cursor-pointer items-center ml-10 text-textgray"
+          className="flex cursor-pointer items-center ml-10 text-textgray transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
         >
-          <ChatAlt2Icon className="h-5 w-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300" />
+          <ChatAlt2Icon className="h-6 w-6" />
           <p>{comments.length}</p>
         </div>
         {!liked && (
-        <div className="flex cursor-pointer items-center mr-10 text-textgray"
+        <div className="flex cursor-pointer items-center mr-10 text-textgray transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
           onClick={(j) => session && handleLike()}>
-          <HeartIcon className="h-5 w-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:text-red-700 duration-300" />
+          <HeartIcon className="h-6 w-6 hover:text-red-700" />
           <p>{tweet.likes===0?" ":tweet.likes}</p>
         </div>
         )}
         {liked && (
         <div className="flex cursor-pointer items-center mr-10">
-          <HeartIcon className="h-5 w-5 fill-red-600" />
+          <HeartIcon className="h-6 w-6 fill-red-600" />
           <p>{tweet.likes+1}</p>
         </div>
         )}
@@ -164,13 +164,14 @@ function Tweet({ tweet }: Props) {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 rounded-lg bg-boxcolor p-2 outline-none placeholder:text-textgray"
+            className="flex-1 rounded-lg bg-boxcolor p-2 outline-none placeholder:text-textgray dark:bg-darkboxcolor"
             type="text"
             placeholder="Write a comment..."
           />
           <button
-            disabled={!input}
-            className="text-twitter disabled:text-textgray"
+            className={!(!input|| !session) ?
+              'bg-twitter px-3 py-2 font-bold text-white rounded-full transition ease-in-out  hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
+              'bg-twitter px-3 py-2 font-bold text-white rounded-full opacity-40'}
             type="submit"
           >
             Post
