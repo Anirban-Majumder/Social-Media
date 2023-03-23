@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import {
     EmojiHappyIcon,
     PhotographIcon,
@@ -11,7 +11,7 @@ import { fetchUserId } from '../utils/fetchUserId'
 import toast from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false })
-import {EmojiStyle, EmojiClickData, Theme} from "emoji-picker-react";
+import {EmojiStyle, EmojiClickData, Theme} from "emoji-picker-react"
 import { useTheme } from 'next-themes'
 
 
@@ -21,17 +21,18 @@ interface Props {
 
 function TweetBox({ setTweets }: Props) {
     const [input, setInput] = useState<string>('')
-    const [image, setImage] = useState('')
+    const [image, setImage] = useState<string>('')
     const { data: session } = useSession()
-    const [loading, setLoading] = useState(true)
+    const [isRawImage, setIsRawImage] = useState<boolean>(false)
     const [placeholder, setPlaceholder] = useState<string>('What\'s happening?')
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false)
     const [imageLink, setImageLink] = useState<string>('')
     const [emojiPickerIsOpen, setEmojiPickerIsOpen] = useState<boolean>(false)
     const {theme, setTheme} = useTheme()
+    const imgRef = useRef<HTMLImageElement>(null)
 
 
-    function waitFor(conditionFunction:any) {
+    const waitFor = (conditionFunction:any) => {
         const poll = (resolve:any) => {
           if(conditionFunction()) resolve()
           else setTimeout((_:any) => poll(resolve), 400)
@@ -39,41 +40,28 @@ function TweetBox({ setTweets }: Props) {
         return new Promise(poll)
     }
 
-    async function checkImage(url:string){
-        const res = await fetch(url);
-        const buff = await res.blob();
-        if(buff.type.startsWith('image/')){
-            return true;
-        }
-    }
-
-    const uploadFromClient = async (event:any) => {
-
-        await  waitFor((_:any) =>event.target.files.length!==0)
-        const selectedFile = event.target.files[0]
-        if (selectedFile.type === 'image/png' || selectedFile.type === 'image/svg'
+    const preViewImage = async (event : any) => {
+        setImage('')
+        await  waitFor((_:any) => event.target.files.length!==0)
+        var selectedFile = event.target.files[0]
+        if (event.target.files.length > 1) {
+            toast.error('Only one image at a time')
+            }
+        else if(selectedFile.type === 'image/png' || selectedFile.type === 'image/svg'
             || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/gif'
             || selectedFile.type === 'image/tiff' || selectedFile.type === 'image/webp'
             || selectedFile.type === 'image/jpg' && selectedFile.size < 1024 * 1024 * 9) {
-            const notii =toast.loading('Uploading...', )
-            setPlaceholder('Give a Title...')
-
-            const formData = new FormData()
-            formData.append('file', selectedFile)
-            formData.append('upload_preset', 'my-uploads')
-            try {
-            const data = await fetch('https://api.cloudinary.com/v1_1/asddadakasd/image/upload', {
-            method: 'POST',
-            body: formData
-            }).then(r => r.json())
-            setImage(data.secure_url)
-            setLoading(false)
-            toast.success('Uploaded!',{id:notii})
-            } catch (error) {
-                toast.error('Server Too Busy!',{id:notii})
+            const reader = new FileReader()
+            reader.onload = (e: ProgressEvent<FileReader>) => {
+                if (e.target && e.target.result) {
+                    setImage(e.target.result.toString())
+                    setIsRawImage(true)
+                }
             }
+            reader.readAsDataURL(selectedFile)
+            setPlaceholder('Give a Title...')
         } else {
-            toast.error('Invalid File Type!')
+            toast.error('Invalid Image Format')
         }
     }
 
@@ -82,25 +70,61 @@ function TweetBox({ setTweets }: Props) {
         setEmojiPickerIsOpen(false)
     }
 
-    async function addImageLink(e: React.MouseEvent<HTMLButtonElement, MouseEvent>){
+    const checkImage = async (url:string)  => {
+        const res = await fetch(url)
+        const buff = await res.blob()
+        if(buff.type.startsWith('image/')){
+            return true
+        }
+    }
+
+    const addImageLink = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         await checkImage(imageLink)? setImage(imageLink) : toast.error('Invalid Image Link!')
-        setLoading(false)
         setImageUrlBoxIsOpen(false)
         setImageLink('')
         setPlaceholder('Give a Title...')
     }
 
+    const uploadFromClient = async () => {
+        const formData = new FormData()
+        formData.append('file', image)
+        formData.append('upload_preset', 'my-uploads')
+        try {
+            const data = await fetch(
+                'https://api.cloudinary.com/v1_1/asddadakasd/image/upload',
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            ).then((r) => r.json())
+            return data.secure_url
+        } catch (error) {
+            console.log(error)
+            toast.error('Server Too Busy!')
+        }
+    }
+
     const postTweet = async () => {
 
-        const noti =toast.loading('Posting...', )
+        const noti = toast.loading('Posting...', )
         const user = await fetchUserId(session?.user?.email)
+
+        let uploadedImageUrl = ''
+        if (image) {
+            if(isRawImage) {
+                uploadedImageUrl = await uploadFromClient()
+            }
+            else {
+                uploadedImageUrl = image
+            }
+        }
 
         const tweetBody: TweetBody = {
             text: input,
             username: user || "Unknown User",
             userimg: " ",
-            image: image
+            image: uploadedImageUrl
         }
 
         const result = await fetch(`/api/addTweet`, {
@@ -112,19 +136,39 @@ function TweetBox({ setTweets }: Props) {
         const newTweets = await fetchTweets()
         setTweets(newTweets)
         setPlaceholder('What\'s happening?')
-        setImage('')
         toast.success('Tweet Posted', {icon: '🚀',id:noti})
-        return json
     }
 
     const handleSubmit = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        postTweet()
-        setInput('')
-        setImage('')
-        setImageUrlBoxIsOpen(false)
-        setLoading(true)
+        toast.dismiss()
+
+        if (!session) {
+            toast.error('Please Login First to Post!')
+        } else if (image && !input) {
+            toast.error('Please Enter a Title!')
+        } else if (!input) {
+            toast.error('Please Enter a some text!')
+        } else {
+            postTweet()
+            setInput('')
+            setImage('')
+            setIsRawImage(false)
+            setImageUrlBoxIsOpen(false)
+            setEmojiPickerIsOpen(false)
+        }
     }
+
+    useEffect(() => {
+        //setting the size of the image box
+        if (imgRef.current && imgRef.current.parentElement) {
+            const aspectRatio =
+                imgRef.current.naturalWidth / imgRef.current.naturalHeight
+            imgRef.current.parentElement.style.width = `${
+                imgRef.current.parentElement.clientHeight * aspectRatio
+            }px`
+        }
+    }, [image])
 
     return (
         <div className='flex space-x-2 p-5 flex-wrap'>
@@ -142,17 +186,26 @@ function TweetBox({ setTweets }: Props) {
                                 <PhotographIcon onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(false)}} className='h-5 w-5 md:h-7 md:w-7 transition ease-in-out  hover:-translate-y-1 hover:scale-110  duration-300'/>
                             </label>
                             {session &&
-                            <input id="upload-button" type="file" style={{ display: 'none' }} onClick={uploadFromClient}/>
+                            <input id="upload-button" type="file" style={{ display: 'none' }} onChange={preViewImage}/>
                             }
                             <SearchCircleIcon onClick={() => {setEmojiPickerIsOpen(false);setImageUrlBoxIsOpen(!imageUrlBoxIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out  hover:-translate-y-1 hover:scale-110  duration-300' />
                             <EmojiHappyIcon  onClick={() => {setImageUrlBoxIsOpen(false);setEmojiPickerIsOpen(!emojiPickerIsOpen)}} className='h-5 w-5 md:h-7 md:w-7  transition ease-in-out  hover:-translate-y-1 hover:scale-110  duration-300'/>
                         </div>
-                        <button onClick={handleSubmit} className={!(!input || !session) ?
+                        <button onClick={handleSubmit} className={(input && session)?
                         'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out  hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
                         'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Post</button>
                     </div>
-                    {image && !loading &&
-                        <img src={image} className='mt-10 h-40 w-full rounded-xl object-contain shadow-lg'/>
+                    {image &&
+                    <div className='mt-10 h-44 mx-auto relative'>
+                        <button
+                          onClick={() => setImage('')}
+                          className="absolute top-0 right-0 bg-red-500 rounded-full p-1 text-xs font-bold text-white border border-red-900 shadow-md  flex items-center justify-center"
+                          style={{ width: "20px", height: "20px" }}
+                        >
+                          X
+                        </button>
+                        <img ref={imgRef} src={image} className='w-full h-full rounded-xl shadow-lg object-contain mx-auto'/>
+                    </div>
                     }
                 </form>
             </div>
@@ -165,7 +218,8 @@ function TweetBox({ setTweets }: Props) {
                     className='outline-none h-20 mt-4 text-base placeholder:text-base p-2 bg-boxcolor rounded-lg mb-6 md:px-10 md:text-xl md:placeholder:text-xl dark:bg-darkboxcolor'/>
                     <div className='flex'>
                         <button onClick={addImageLink} type="submit"
-                            className={!(!imageLink || !session) ?
+                            disabled={!(imageLink && session)}
+                            className={(imageLink && session)?
                             'bg-twitter px-5 py-2 font-bold text-white rounded-full transition ease-in-out  hover:-translate-y-1 hover:scale-110 hover:bg-blue-500 duration-300' :
                             'bg-twitter px-5 py-2 font-bold text-white rounded-full opacity-40'}>Add Image</button>
                     </div>

@@ -46,7 +46,7 @@ function Sidebar() {
         <div className='col-span-2 flex max-w-fit space-x-2 px-1 py-4 rounded-full'>
         <FireIcon className='relative h-8 w-8 top-3'/>
         <p className='inline-flex group-hover:text-twitter text-xl font-normal'>Here Are Some <br></br>Awesome Links:</p>
-        <XCircleIcon className='h-8 w-8 inline object-center pt-1' onClick={() => {popup=false; toast.dismiss(t.id)}}/>
+        <XCircleIcon className='h-8 w-8 inline object-center pt-1 text-red-500' onClick={() => {popup=false; toast.dismiss(t.id)}}/>
         </div>
         <div onClick={() => window.open('https://anirbanmajumder.vercel.app/')} className='col-span-2 flex max-w-fit space-x-2 px-4 py-4 rounded-full hover:bg-bordercolor dark:hover:bg-zinc-900 cursor-pointer transition duration-200 group'>
         <SparklesIcon className='h-6 w-6 lg:h-7 lg:w-7'/>
@@ -68,8 +68,8 @@ function Sidebar() {
   </div>
 ))}
 
-  function notification() {return toast('You have no new notifications.',{icon: '🔔'})}
-  function explore() { return toast.success('No Hashtags to explore.',{icon: '🔍'})}
+  function notification() {toast.dismiss(); return toast('You have no new notifications.',{icon: '🔔'})}
+  function explore() {toast.dismiss(); return toast.success('No Hashtags to explore.',{icon: '🔍'})}
   function home() {return Router.push('/home')}
   function dark() {setTheme(theme === 'dark' ? 'light' : 'dark');return 0}
   return (
