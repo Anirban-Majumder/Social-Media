@@ -139,7 +139,7 @@ function TweetBox({ setTweets }: Props) {
             toast.success('Tweet Posted', {icon: '🚀',id:noti})
         } catch (error) {
             console.log(error)
-            toast.error('Server Too Busy!', {id:noti})
+            toast.error('Something went Wrong!', {icon:'😢',id:noti})
         }
     }
 

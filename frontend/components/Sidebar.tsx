@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState, useContext, useEffect} from 'react'
 import {
     BellIcon,
     HashtagIcon,
@@ -19,18 +19,21 @@ import toast from 'react-hot-toast'
 import Router from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import {useTheme} from 'next-themes'
+import RefreshContext from './RefreshContext'
 
 
 
 function Sidebar() {
   const { data: session } = useSession()
   const {theme, setTheme} = useTheme()
+  const { setRefresh } = useContext(RefreshContext)
   var popup = false
 
-  const [hasMounted, setHasMounted] = React.useState(false);
-  React.useEffect(() => {
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
     setHasMounted(true);
   }, []);
+
   if (!hasMounted) {
     return null;
   }
@@ -70,7 +73,7 @@ function Sidebar() {
 
   function notification() {toast.dismiss(); return toast('You have no new notifications.',{icon: '🔔'})}
   function explore() {toast.dismiss(); return toast.success('No Hashtags to explore.',{icon: '🔍'})}
-  function home() {return Router.push('/home')}
+  function home() {setRefresh(true); return 0}
   function dark() {setTheme(theme === 'dark' ? 'light' : 'dark');return 0}
   return (
     <div className='flex flex-col items-center py-5 px-4 md:items-start col-span-2'>

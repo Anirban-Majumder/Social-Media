@@ -153,7 +153,7 @@ function Tweet({ tweet }: Props) {
         )}
         {liked && (
         <div className="flex cursor-pointer items-center mr-10">
-          <HeartIcon className="h-6 w-6 fill-red-600" />
+          <HeartIcon className="h-6 w-6 fill-red-600 text-red-600" />
           <p>{tweet.likes+1}</p>
         </div>
         )}
