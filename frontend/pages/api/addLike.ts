@@ -11,9 +11,8 @@ export default async function handler(
     res: NextApiResponse<Data>
 ) {
     const like:Like = JSON.parse(req.body)
-    console.log(like)
-    
-    const mutations1 = { 
+
+    const mutations1 = {
         mutations: [
             {
                 patch: {
@@ -26,7 +25,7 @@ export default async function handler(
         ],
     }
 
-    const mutations2 = { 
+    const mutations2 = {
         mutations: [
             {
                 create: {
@@ -45,7 +44,7 @@ export default async function handler(
         ]
     }
     const apiEndpoint = `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2021-03-25/data/mutate/${process.env.NEXT_PUBLIC_SANITY_DATASET}`
-    
+
     const result1 = await fetch(apiEndpoint, {
         headers: {
             'content-type': 'application/json',
@@ -66,7 +65,5 @@ export default async function handler(
 
     const json = await result1.json()
     const json2 = await result2.json()
-    console.log("liking tweet")
-    console.log(json, json2)
     res.status(200).json({ message: 'success' })
 }

@@ -23,7 +23,7 @@ function Tweet({ tweet }: Props) {
   const [checklike,SetChecklike] = useState<boolean>(false)
   const [input, setInput] = useState<string>('')
   const [comments, setComments] = useState<Comment[]>([])
-
+  const [isLiking, setIsLiking] = useState<boolean>(false)
   const { data: session, status } = useSession()
 
   const refreshComments = async () => {
@@ -85,17 +85,28 @@ function Tweet({ tweet }: Props) {
   }
 
   const handleLike = async () => {
+    if (isLiking) return
+    setIsLiking(true)
     setLiked(!liked)
+
     const user = await fetchUserId(session?.user?.email)
     const like: Like = {
       tweetId: tweet._id,
       userId: user,
     }
-    const result = await fetch(`/api/addLike`, {
-      body: JSON.stringify(like),
-      method: 'POST',
-    })
-    //console.log('WOOHOO we liked it', result)
+
+    if (!liked) {
+      const result = await fetch(`/api/addLike`, {
+        body: JSON.stringify(like),
+        method: 'POST',
+      })
+    } else {
+      const result = await fetch(`/api/removeLike`, {
+        body: JSON.stringify(like),
+        method: 'POST',
+      })
+    }
+    setIsLiking(false)
   }
 
   return (
@@ -146,13 +157,14 @@ function Tweet({ tweet }: Props) {
         </div>
         {!liked && (
         <div className="flex cursor-pointer items-center mr-10 text-textgray transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
-          onClick={(j) => session && handleLike()}>
+          onClick={(j) => session && !isLiking && handleLike()}>
           <HeartIcon className="h-6 w-6 hover:text-red-700" />
           <p>{tweet.likes===0?" ":tweet.likes}</p>
         </div>
         )}
         {liked && (
-        <div className="flex cursor-pointer items-center mr-10">
+        <div className="flex cursor-pointer items-center mr-10"
+          onClick={(j) => session && !isLiking && handleLike()}>
           <HeartIcon className="h-6 w-6 fill-red-600 text-red-600" />
           <p>{tweet.likes+1}</p>
         </div>
