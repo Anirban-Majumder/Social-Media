@@ -20,10 +20,8 @@ const options = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
   ],
-  theme: {
-    colorScheme: "dark",
-    brandColor: "#0558FF", // Hex color code
-    logo: "/white_logo.png",
+  pages: {
+    signIn: '/signin'
   },
   session: {
     strategy: 'jwt',
