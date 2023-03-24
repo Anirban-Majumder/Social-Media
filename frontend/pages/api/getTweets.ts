@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { sanityClient } from "../../sanity";
+import { quickClient } from "../../sanity";
 import { Tweet } from '../../typings';
 import { groq } from "next-sanity";
 
@@ -26,6 +26,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    const tweets: Tweet[] = await sanityClient.fetch(feedQuery)
+    const tweets: Tweet[] = await quickClient.fetch(feedQuery)
+    res.setHeader('Cache-Control', 'no-store')
     res.status(200).json({ tweets })
 }

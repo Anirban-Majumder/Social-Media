@@ -11,7 +11,7 @@ export const fetchLikes = async (tweetId: string, email: any) => {
         const userId = await fetchUserId(email)
         //console.log(userId)
         //console.log("fetching likes")
-        const res = await fetch(`api/liked?tweetId=${tweetId}&userId=${userId}`)
+        const res = await fetch(`/api/liked?tweetId=${tweetId}&userId=${userId}`)
         //console.log(res)
         const liked = await res.json()
         liked.length==0?result=false:result=true

@@ -28,7 +28,7 @@ function TweetBox({ setTweets }: Props) {
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false)
     const [imageLink, setImageLink] = useState<string>('')
     const [emojiPickerIsOpen, setEmojiPickerIsOpen] = useState<boolean>(false)
-    const {theme, setTheme} = useTheme()
+    const {theme} = useTheme()
     const imgRef = useRef<HTMLImageElement>(null)
 
 
@@ -106,37 +106,41 @@ function TweetBox({ setTweets }: Props) {
     }
 
     const postTweet = async () => {
-
         const noti = toast.loading('Posting...', )
-        const user = await fetchUserId(session?.user?.email)
+        try {
+            const user = await fetchUserId(session?.user?.email)
+            let uploadedImageUrl = ''
 
-        let uploadedImageUrl = ''
-        if (image) {
-            if(isRawImage) {
-                uploadedImageUrl = await uploadFromClient()
+            if (image) {
+                if(isRawImage) {
+                    uploadedImageUrl = await uploadFromClient()
+                }
+                else {
+                    uploadedImageUrl = image
+                }
             }
-            else {
-                uploadedImageUrl = image
+
+            const tweetBody: TweetBody = {
+                text: input,
+                username: user || "Unknown User",
+                userimg: " ",
+                image: uploadedImageUrl
             }
+
+            const result = await fetch(`/api/addTweet`, {
+                body: JSON.stringify(tweetBody),
+                method: 'POST'
+            })
+
+            const json = await result.json()
+            const newTweets = await fetchTweets()
+            setTweets(newTweets)
+            setPlaceholder('What\'s happening?')
+            toast.success('Tweet Posted', {icon: '🚀',id:noti})
+        } catch (error) {
+            console.log(error)
+            toast.error('Server Too Busy!', {id:noti})
         }
-
-        const tweetBody: TweetBody = {
-            text: input,
-            username: user || "Unknown User",
-            userimg: " ",
-            image: uploadedImageUrl
-        }
-
-        const result = await fetch(`/api/addTweet`, {
-            body: JSON.stringify(tweetBody),
-            method: 'POST'
-        })
-
-        const json = await result.json()
-        const newTweets = await fetchTweets()
-        setTweets(newTweets)
-        setPlaceholder('What\'s happening?')
-        toast.success('Tweet Posted', {icon: '🚀',id:noti})
     }
 
     const handleSubmit = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
