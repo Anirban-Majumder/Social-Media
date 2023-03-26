@@ -143,7 +143,7 @@ export default function SignIn(): JSX.Element {
         <p className="text-xs text-textgray">
           Click “Sign In” to agree to Ani’s place’s{' '}
           <a
-            href=""
+            href="/terms"
             target="_blank"
             rel="noopener noreferrer"
             className= "hover:text-twitter underline"
@@ -152,7 +152,7 @@ export default function SignIn(): JSX.Element {
           </a>{' '}
           and acknowledge that  Ani’s place’s{' '}
           <a
-            href=""
+            href="/privacy-policy"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-twitter underline"
