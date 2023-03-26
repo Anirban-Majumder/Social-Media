@@ -12,6 +12,7 @@ export default function SignIn(): JSX.Element {
   const [emailLogin, setEmailLogin] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -79,18 +80,28 @@ export default function SignIn(): JSX.Element {
   return (
     <div className="flex flex-col justify-between min-h-screen py-4 items-center dark:bg-darkgrey">
       <div className="flex flex-col items-center justify-center mt-16">
-        <h2 className="text-3xl font-bold mb-4">Welcome back.</h2>
+        <h2 className="text-3xl font-bold mb-4 transition-all duration-500">{isSignUp ? "Join Ani's place" : "Welcome back."}</h2>
       </div>
       {!emailLogin?
       <div className="flex flex-col items-center justify-center">
-      {Object.values(providers).map((provider:any) => (
-            <div key={provider.name} className="mb-4 flex items-center justify-start">
+        {Object.values(providers)
+          .filter((provider: any) => !isSignUp || provider.name !== 'GitHub')
+          .map((provider: any) => (
+            <div key={provider.name} className="mb-4 flex items-center justify-start ">
               <button
-                onClick={!(provider.name==="email")?() => signIn(provider.id,{ callbackUrl: '/' }) : errorToast}
+                onClick={
+                  !(provider.name === 'email')
+                    ? () => signIn(provider.id, { callbackUrl: '/' })
+                    : errorToast
+                }
                 className="w-60 px-4 py-2 rounded-full border border-gray-600 dark:border-gray-400 hover:border-black dark:hover:border-white transition ease-in-out hover:-translate-y-1 hover:scale-80 duration-300 whitespace-nowrap flex items-center justify-center"
               >
-                <img src={getProviderLogo(provider.name)} alt={provider.name} className="w-6 h-6 mr-2 left-0" />
-                Sign in with {provider.name}
+                <img
+                  src={getProviderLogo(provider.name)}
+                  alt={provider.name}
+                  className="w-6 h-6 mr-2 left-0"
+                />
+                {isSignUp ? "Sign up with" : "Sign in with"} {provider.name}
               </button>
             </div>
           ))}
@@ -132,47 +143,64 @@ export default function SignIn(): JSX.Element {
         </div>
       </form>}
       <div className="mb-4 pb-4">
-        <p className="text-sm text-gray-600 text-center">
-          No account?{' '}
-          <button className="font-bold text-twitter transition ease-in-out hover:-translate-y-1 hover:scale-80 duration-300">
-            Create one
-          </button>
+        <p className="text-sm text-gray-600 text-center transition-all duration-500">
+          {!isSignUp ? (
+            <>
+              No account?{' '}
+              <button
+                onClick={() => setIsSignUp(true)}
+                className="font-bold text-twitter transition ease-in-out hover:-translate-y-1 hover:scale-80 duration-300"
+              >
+                Create one
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <button
+                onClick={() => setIsSignUp(false)}
+                className="font-bold text-twitter transition ease-in-out hover:-translate-y-1 hover:scale-80 duration-300"
+              >
+                Sign in
+              </button>
+            </>
+          )}
         </p>
       </div>
       <div className="mb-4 text-center px-4">
-        <p className="text-xs text-textgray">
-          Click “Sign In” to agree to Ani’s place’s{' '}
+        <p className="text-xs text-textgray transition-all duration-500">
+          Click “Sign {isSignUp ? "Up" : "In"}” to agree to Ani’s place’s{' '}
           <a
             href="/terms"
             target="_blank"
             rel="noopener noreferrer"
-            className= "hover:text-twitter underline"
+            className="hover:text-twitter underline"
           >
             Terms of Service
           </a>{' '}
-          and acknowledge that  Ani’s place’s{' '}
+          and acknowledge that Ani’s place’s{' '}
           <a
             href="/privacy-policy"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-twitter underline"
-          >
-            Privacy Policy
-          </a>{' '}
-          applies to you.
-        </p>
-        <p className="text-xs text-textgray">
-          Icons by{' '}
-          <a
-            href="https://icons8.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-twitter underline"
-          >
-            Icons8
-          </a>
-        </p>
+            >
+              Privacy Policy
+            </a>{' '}
+            applies to you.
+          </p>
+          <p className="text-xs text-textgray">
+            Icons by{' '}
+            <a
+              href="https://icons8.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-twitter underline"
+            >
+              Icons8
+            </a>
+          </p>
       </div>
     </div>
   );
-};
+}
