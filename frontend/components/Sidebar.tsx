@@ -27,16 +27,12 @@ function Sidebar() {
   const { data: session } = useSession()
   const {theme, setTheme} = useTheme()
   const { setRefresh } = useContext(RefreshContext)
+  const [hasMounted, setHasMounted] = useState(false);
   var popup = false
 
-  const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
     setHasMounted(true);
   }, []);
-
-  if (!hasMounted) {
-    return null;
-  }
 
   function more() {
     if(popup === true) {return 0}
@@ -77,11 +73,11 @@ function Sidebar() {
   function dark() {setTheme(theme === 'dark' ? 'light' : 'dark');return 0}
   return (
     <div className='flex flex-col items-center py-5 px-4 md:items-start col-span-2'>
-        <img className='m-3 h-10 w-10 md:self-center' src={theme === 'light'? "/logo.png" : "/logodark.png"}  />
+        <img className='m-3 h-10 w-10 md:self-center' src={hasMounted?(theme === 'light'? "/logo.png" : "/logodark.png"):"/logo.png"}  />
         <SidebarRow Icon={HomeIcon} title="Home" onClick={home}/>
         <SidebarRow Icon={HashtagIcon} title="Explore" onClick={explore}/>
         <SidebarRow Icon={BellIcon} title="Notifications" onClick={notification}/>
-        <SidebarRow Icon={theme === 'light'? MoonIcon : SunIcon} onClick={dark} title= {theme === 'light'? "Dark Mode" : "Light Mode" }/>
+        <SidebarRow Icon={hasMounted?(theme === 'light'? MoonIcon : SunIcon):MoonIcon} onClick={dark} title= {hasMounted?(theme === 'light'? "Dark Mode" : "Light Mode"):"Dark Mode"}/>
         <SidebarRow Icon={UserIcon} onClick={!session ? signIn : signOut} title={session ? 'Sign Out' : 'Sign In'}/>
         <SidebarRow Icon={DotsCircleHorizontalIcon} onClick={more} title="More" extra='lg:hidden'/>
     </div>

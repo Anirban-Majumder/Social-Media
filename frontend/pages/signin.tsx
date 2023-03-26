@@ -47,13 +47,13 @@ export default function SignIn(): JSX.Element {
   function getProviderLogo(providerName: string) {
     switch (providerName) {
       case 'Google':
-        return 'https://img.icons8.com/color/48/null/google-logo.png';
+        return '/google-logo.png';
       case 'Facebook':
-        return 'https://img.icons8.com/fluency/48/null/facebook-new.png';
+        return '/facebook-new.png';
       case 'GitHub':
-        return 'https://img.icons8.com/ios-filled/50/null/github.png';
+        return '/github.png';
       case 'email':
-        return 'https://img.icons8.com/fluency/48/null/filled-message.png';
+        return '/filled-message.png';
       default:
         return '/default-logo.png';
     }
@@ -74,7 +74,17 @@ export default function SignIn(): JSX.Element {
   }
 
   if (!providers) {
-    return <p>Loading...</p>;
+    return (
+    <div className="flex flex-col justify-center items-center h-screen">
+    <div
+      className="inline-block h-36 w-36 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+      role="status">
+    </div>
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-900 font-bold">
+          Loading....
+        </div>
+  </div>
+    );
   }
 
   return (

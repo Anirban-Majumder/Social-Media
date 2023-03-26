@@ -20,6 +20,7 @@ interface Props {
 }
 
 function TweetBox({ setTweets }: Props) {
+    const [hasMounted, setHasMounted] = useState(false)
     const [input, setInput] = useState<string>('')
     const [image, setImage] = useState<string>('')
     const { data: session } = useSession()
@@ -174,9 +175,13 @@ function TweetBox({ setTweets }: Props) {
         }
     }, [image])
 
+    useEffect(() => {
+        setHasMounted(true)
+      }, [])
+
     return (
         <div className='flex space-x-2 p-5 flex-wrap'>
-            <img className='h-14 w-14 object-cover rounded-full mt-4' src={session?.user?.image || (theme === 'dark'? "/profiledark.jpg" : "/profile.jpg")} alt="" />
+            <img className='h-14 w-14 object-cover rounded-full mt-4' src={hasMounted?(session?.user?.image || (theme === 'dark'? "/profiledark.jpg" : "/profile.jpg")):"/profile.jpg"} alt="" />
             <div className='flex flex-1 pl-2'>
                 <form className='flex flex-1 flex-col'>
                     <input
