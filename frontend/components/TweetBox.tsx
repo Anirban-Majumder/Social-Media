@@ -29,7 +29,7 @@ function TweetBox({ setTweets }: Props) {
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false)
     const [imageLink, setImageLink] = useState<string>('')
     const [emojiPickerIsOpen, setEmojiPickerIsOpen] = useState<boolean>(false)
-    const {theme} = useTheme()
+    const {resolvedTheme} = useTheme()
     const imgRef = useRef<HTMLImageElement>(null)
 
 
@@ -181,7 +181,7 @@ function TweetBox({ setTweets }: Props) {
 
     return (
         <div className='flex space-x-2 p-5 flex-wrap'>
-            <img className='h-14 w-14 object-cover rounded-full mt-4' src={hasMounted?(session?.user?.image || (theme === 'dark'? "/profiledark.jpg" : "/profile.jpg")):"/profile.jpg"} alt="" />
+            <img className='h-14 w-14 object-cover rounded-full mt-4' src={hasMounted?(session?.user?.image || (resolvedTheme === 'dark'? "/profiledark.jpg" : "/profile.jpg")):"/profile.jpg"} alt="" />
             <div className='flex flex-1 pl-2'>
                 <form className='flex flex-1 flex-col'>
                     <input
@@ -219,7 +219,7 @@ function TweetBox({ setTweets }: Props) {
                 </form>
             </div>
             {emojiPickerIsOpen && (
-                <Picker onEmojiClick={onEmojiClick} width={300} height={350} searchDisabled={true} emojiStyle={EmojiStyle.NATIVE} skinTonesDisabled={true} theme={theme === 'dark'?Theme.DARK:Theme.LIGHT} />
+                <Picker onEmojiClick={onEmojiClick} width={300} height={350} searchDisabled={true} emojiStyle={EmojiStyle.NATIVE} skinTonesDisabled={true} theme={resolvedTheme === 'dark'?Theme.DARK:Theme.LIGHT} />
             )}
             {imageUrlBoxIsOpen && (
                 <form className='flex flex-1 flex-col'>

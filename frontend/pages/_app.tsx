@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps : {session, ...pageProps} }: AppProps) {
   return (
     <RefreshContext.Provider value={{ refresh, setRefresh }}>
       <SessionProvider session={session}>
-        <ThemeProvider attribute="class" enableSystem={false}>
+        <ThemeProvider attribute="class">
           <Component {...pageProps} />
         </ThemeProvider>
       </SessionProvider>
