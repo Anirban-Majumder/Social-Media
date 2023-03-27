@@ -20,11 +20,10 @@ interface Props {
 function Tweet({ tweet }: Props) {
   const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
   const [liked, setLiked] = useState<boolean>(false)
-  const [checklike,SetChecklike] = useState<boolean>(false)
   const [input, setInput] = useState<string>('')
   const [comments, setComments] = useState<Comment[]>([])
   const [isLiking, setIsLiking] = useState<boolean>(false)
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   const refreshComments = async () => {
     const comments: Comment[] = await fetchComments(tweet._id)
@@ -32,9 +31,7 @@ function Tweet({ tweet }: Props) {
   }
 
   const refreshliked = async () => {
-    SetChecklike(true)
     const value: boolean = await fetchLikes(tweet._id, session?.user?.email)
-    //console.log('refreshinglike')
     setLiked(value)
   }
 
@@ -47,9 +44,11 @@ function Tweet({ tweet }: Props) {
     } ${suffix}`;
   }
 
-  //useEffect(() => {
-  //  refreshliked()
-  //}, [checklike])
+  useEffect(() => {
+    if (session) {
+      refreshliked();
+    }
+  }, [session]);
 
   useEffect(() => {
     refreshComments()
@@ -85,29 +84,22 @@ function Tweet({ tweet }: Props) {
   }
 
   const handleLike = async () => {
-    if (isLiking) return
-    setIsLiking(true)
-    setLiked(!liked)
+    if (isLiking) return;
+    setIsLiking(true);
+    setLiked(!liked);
 
-    const user = await fetchUserId(session?.user?.email)
     const like: Like = {
       tweetId: tweet._id,
-      userId: user,
-    }
+      userId: await fetchUserId(session?.user?.email),
+    };
 
-    if (!liked) {
-      const result = await fetch(`/api/addLike`, {
-        body: JSON.stringify(like),
-        method: 'POST',
-      })
-    } else {
-      const result = await fetch(`/api/removeLike`, {
-        body: JSON.stringify(like),
-        method: 'POST',
-      })
-    }
-    setIsLiking(false)
-  }
+    await fetch(`/api/${liked ? "removeLike" : "addLike"}`, {
+      body: JSON.stringify(like),
+      method: "POST",
+    });
+
+    setIsLiking(false);
+  };
 
   return (
     <div
@@ -219,9 +211,6 @@ function Tweet({ tweet }: Props) {
             </div>
           ))}
         </div>
-      )}
-      {session && !checklike && refreshliked() && (
-        <div></div>
       )}
     </div>
   )
