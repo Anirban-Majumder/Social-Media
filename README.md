@@ -1,4 +1,5 @@
 ## Ani's Place
+![](https://github.com/user-attachments/assets/7a284c23-522e-40dc-87fe-7fd53ebac794)
 
 This is the code of both the frontend and backend of the project.
 This is a social media similar to Twitter and Instagram. You can create a new account, login, and post messages.
